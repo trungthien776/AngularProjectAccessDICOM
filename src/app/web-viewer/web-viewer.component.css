@@ -50,7 +50,12 @@
   position: absolute ;
   color: #91B9CD!important;
 }
-
+nav{
+  border: black thick solid;
+}
+a{
+  text-decoration: none;
+}
 
 
 

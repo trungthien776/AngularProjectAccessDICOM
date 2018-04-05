@@ -1,5 +1,5 @@
 import { Directive, ElementRef, HostListener, EventEmitter, OnInit, Input, Output } from '@angular/core';
-
+import { AfterViewInit } from '@angular/core';
 import Hammer from 'hammerjs';
 import * as dicomParser from 'dicom-parser';
 import * as cornerstone from 'cornerstone-core';
@@ -16,34 +16,30 @@ cornerstoneTools.external.cornerstoneMath = cornerstoneMath;
 export class WebViewerDirectiveDirective implements OnInit{
   element: any;
   currentIndex = 0;
-
   imageList = [];
   imageListId = [];
   headers: Array<string> = [];
-  @Output() headersUpdated: EventEmitter<Array<String>> = new EventEmitter();
   @Input('image')
   set image(imageData: any) {
     // console.log('setting image data:', imageData);
-
     if (imageData) {
       if (!this.imageList.filter(img => img.imageId === imageData.imageId).length) {
         this.imageList.push(imageData);
         this.imageListId.push(imageData.imageId);
       }
-
       if (imageData.imageId) {
         this.displayImage(imageData, this.element);
       }
-      // console.log(this.imageList);
+      console.log(this.imageList);
     }
   }
+  @Output() headersUpdated: EventEmitter<Array<String>> = new EventEmitter();
   constructor(public elementRef: ElementRef) {
     this.elementRef = elementRef;
-   }
-   ngOnInit(){
+  }
+  ngOnInit(){
      // Retrieve the DOM element itself
      this.element = this.elementRef.nativeElement;
-
      // Enable the element with Cornerstone
      cornerstone.enable(this.element);
    }
@@ -53,16 +49,13 @@ export class WebViewerDirectiveDirective implements OnInit{
       currentImageIdIndex: 0,
       imageIds: this.imageListId
     };
-
     this.headers['currentImage'] = stack.currentImageIdIndex;
-
     /** get metadata using DicomParser */
     this.getImageHeaders(image);
-
     cornerstone.displayImage(element, image);
-
-    // enable inputs
+    // enable mouse inputs 
     cornerstoneTools.mouseInput.enable(element);
+
     // cornerstoneTools.mouseWheelInput.enable(element);
     // cornerstoneTools.touchInput.enable(element);
 
@@ -71,20 +64,35 @@ export class WebViewerDirectiveDirective implements OnInit{
     cornerstoneTools.addToolState(element, 'stack', stack);
 
     // mouse
-    cornerstoneTools.pan.activate(element, 2); // middle click
-    cornerstoneTools.zoom.activate(element, 1); // right click
-
+    // cornerstoneTools.wwwc.activate(element, 1); // ww/wc is the default tool for left mouse button
+    cornerstoneTools.pan.activate(element, 2); // pan is the default tool for middle mouse button
+    cornerstoneTools.zoom.activate(element, 4); // right click
+    // cornerstoneTools.length.enable(element);
+    // cornerstoneTools.length.activate(element, 1);
+    // cornerstoneTools.angle.enable(element);
+    // cornerstoneTools.angle.activate(element,1);
     // touch / gesture
-    cornerstoneTools.zoomTouchPinch.activate(element); // - Pinch
-    cornerstoneTools.panMultiTouch.activate(element); // - Multi (x2)
-    cornerstoneTools.stackScrollTouchDrag.activate(element); // - Multi (x2) Drag
+    // cornerstoneTools.zoomTouchPinch.activate(element); // - Pinch
+    // cornerstoneTools.panMultiTouch.activate(element); // - Multi (x2)
+    // cornerstoneTools.stackScrollTouchDrag.activate(element); // - Multi (x2) Drag
+    // cornerstoneTools.probe.enable(element);
+    // cornerstoneTools.probe.activate(element,1);
+    // cornerstoneTools.length.enable(element);
+    // cornerstoneTools.ellipticalRoi.enable(element);
+    // cornerstoneTools.rectangleRoi.enable(element);
+    // cornerstoneTools.angle.enable(element);
+    // cornerstoneTools.highlight.enable(element);
+    
+  }
 
+  // @HostListener('mouseenter')
+  // onclick(){
+  //   this.ativeProbe(this.element);
+  // }
+
+  ativeProbe(element){
     cornerstoneTools.probe.enable(element);
-    cornerstoneTools.length.enable(element);
-    cornerstoneTools.ellipticalRoi.enable(element);
-    cornerstoneTools.rectangleRoi.enable(element);
-    cornerstoneTools.angle.enable(element);
-    cornerstoneTools.highlight.enable(element);
+    cornerstoneTools.probe.activate(element, 1);
   }
 
   getImageHeaders(image) {
@@ -137,5 +145,8 @@ export class WebViewerDirectiveDirective implements OnInit{
     this.headers['currentImage'] = this.currentIndex;
     this.image = this.imageList[this.currentIndex];
   }
-
+  @HostListener('click')
+  onClickMe() {
+    this.ativeProbe(this.element)
+  }
 }

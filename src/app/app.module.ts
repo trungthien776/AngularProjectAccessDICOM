@@ -11,7 +11,7 @@ import { WebViewerDirectiveDirective } from './web-viewer/web-viewer-directive.d
 import { WebViewerComponent } from './web-viewer/web-viewer.component';
 import { SeriesComponent } from './series/series.component';
 import { LoginComponent } from './login/login.component';
-
+import { Example } from "./web-viewer/example.directive";
 const routesConfig: Routes = [
   { path: '', component: LoginComponent },
   { path: 'patients', component: PatientComponent },
@@ -27,7 +27,8 @@ const routesConfig: Routes = [
     SeriesComponent,
     LoginComponent,
     WebViewerComponent,
-    WebViewerDirectiveDirective
+    WebViewerDirectiveDirective,
+    Example
   ],
   imports: [
     BrowserModule,

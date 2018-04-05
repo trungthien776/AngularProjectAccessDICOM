@@ -3,10 +3,13 @@
 <div class="container-fluid">
   <div class="row">
     <nav>
-      <a href="#">zoom</a>
-      <a href="#">pan</a>
-      <a href="#">lenght</a>
-      <a href="#">angle</a>
+      <button (click)="onClickMe()">zoom!</button>
+      <button (click)="onClickMe()">pan</button>
+      <button (click)="onClickMe()">lenght</button>
+      <button (click)="onClickMe()">angle</button>
+      <button (click)="onClickMe()">ellipticalRoi</button>
+      <button (click)="onClickMe()">rectangleRoi</button>
+      <button #a (click)="onClickMe()">probe</button>
     </nav>
     <div class="col-sm-10 main-content">
       <div class="content-item">
